@@ -10,6 +10,18 @@ AMovingPlatform::AMovingPlatform()
     SetMobility(EComponentMobility::Type::Movable);
 }
 
+void AMovingPlatform::BeginPlay()
+{
+    Super::BeginPlay();
+
+    if (HasAuthority())
+    {
+        SetReplicates(true);
+        SetReplicateMovement(true);
+    }
+
+}
+
 void AMovingPlatform::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
