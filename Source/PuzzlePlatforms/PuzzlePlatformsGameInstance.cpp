@@ -49,6 +49,15 @@ void UPuzzlePlatformsGameInstance::Join(const FString& Address)
     }
 
     Engine->AddOnScreenDebugMessage(0, 5, FColor::Green, FString::Printf(TEXT("Joining %s"), *Address));
+
+    APlayerController* PlayerController = GetFirstLocalPlayerController();
+    if (PlayerController == nullptr)
+    {
+        UE_LOG(LogTemp, Error, TEXT("PlayerController pointer equals null"));
+        Engine->AddOnScreenDebugMessage(0, 3, FColor::Red, TEXT("Error: PlayerController pointer equals null"));
+    }
+
+    PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 }
 
 
