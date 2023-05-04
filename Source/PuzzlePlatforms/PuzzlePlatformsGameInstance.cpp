@@ -26,6 +26,22 @@ void UPuzzlePlatformsGameInstance::Init()
     UE_LOG(LogTemp, Warning, TEXT("Found Class: %s"), *MenuClass->GetName());
 }
 
+void UPuzzlePlatformsGameInstance::LoadMenu()
+{
+    if (MenuClass == nullptr)
+    {
+        UE_LOG(LogTemp, Error, TEXT("MenuClass not set"));
+        return;
+    }
+    UUserWidget* Menu = CreateWidget<UUserWidget>(this, MenuClass);
+    if (Menu == nullptr)
+    {
+        UE_LOG(LogTemp, Error, TEXT("Menu ptr not set"));
+        return;
+    }
+    Menu->AddToViewport();
+}
+
 void UPuzzlePlatformsGameInstance::Host()
 {
     UEngine* Engine = GetEngine();
