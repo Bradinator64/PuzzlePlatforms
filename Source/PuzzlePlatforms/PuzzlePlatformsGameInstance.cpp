@@ -40,6 +40,19 @@ void UPuzzlePlatformsGameInstance::LoadMenu()
         return;
     }
     Menu->AddToViewport();
+
+    APlayerController* PlayerController = GetFirstLocalPlayerController();
+    if (PlayerController == nullptr)
+    {
+        UE_LOG(LogTemp, Error, TEXT("PlayerController pointer equals null"));
+        return;
+    }
+    FInputModeUIOnly InputModeData;
+    InputModeData.SetWidgetToFocus(Menu->TakeWidget());
+    InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+
+    PlayerController->SetInputMode(InputModeData);
+    PlayerController->bShowMouseCursor = true;
 }
 
 void UPuzzlePlatformsGameInstance::Host()
@@ -81,6 +94,7 @@ void UPuzzlePlatformsGameInstance::Join(const FString& Address)
     {
         UE_LOG(LogTemp, Error, TEXT("PlayerController pointer equals null"));
         Engine->AddOnScreenDebugMessage(0, 3, FColor::Red, TEXT("Error: PlayerController pointer equals null"));
+        return;
     }
 
     PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
