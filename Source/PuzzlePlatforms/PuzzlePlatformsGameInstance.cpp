@@ -7,6 +7,8 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
 
+#include "MenuSystem/MainMenu.h"
+
 
 
 UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitializer & ObjectInitializer)
@@ -33,7 +35,7 @@ void UPuzzlePlatformsGameInstance::LoadMenu()
         UE_LOG(LogTemp, Error, TEXT("MenuClass not set"));
         return;
     }
-    UUserWidget* Menu = CreateWidget<UUserWidget>(this, MenuClass);
+    UMainMenu* Menu = CreateWidget<UMainMenu>(this, MenuClass);
     if (Menu == nullptr)
     {
         UE_LOG(LogTemp, Error, TEXT("Menu ptr not set"));
@@ -53,6 +55,8 @@ void UPuzzlePlatformsGameInstance::LoadMenu()
 
     PlayerController->SetInputMode(InputModeData);
     PlayerController->bShowMouseCursor = true;
+
+    Menu->SetMenuInterface(this);
 }
 
 void UPuzzlePlatformsGameInstance::Host()
