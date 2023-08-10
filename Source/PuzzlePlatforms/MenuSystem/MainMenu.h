@@ -18,6 +18,8 @@ class PUZZLEPLATFORMS_API UMainMenu : public UUserWidget
 public:
 	void SetMenuInterface(IMenuInterface* MenuInterfaceImplementer);
 
+	void Setup();
+
 protected:
 	virtual bool Initialize() override;
 
@@ -32,6 +34,8 @@ private:
 	void HostServer();
 
 	IMenuInterface* MenuInterface;
+
+	virtual void OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld) override;
 };
 
 
