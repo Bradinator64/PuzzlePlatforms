@@ -4,6 +4,8 @@
 #include "MainMenu.h"
 
 #include "Components/Button.h"
+#include "Components/WidgetSwitcher.h"
+
 
 bool UMainMenu::Initialize()
 {
@@ -13,12 +15,23 @@ bool UMainMenu::Initialize()
         return false;
     }
 
-    //TODO: setup
-    if (Host == nullptr)
+    if (HostButton == nullptr)
     {
         return false;
     }
-    Host->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
+    HostButton->OnClicked.AddDynamic(this, &UMainMenu::HostServer);
+
+    if (JoinButton == nullptr)
+    {
+        return false;
+    }
+    JoinButton->OnClicked.AddDynamic(this, &UMainMenu::OpenJoinMenu);
+
+    if (CancelJoinMenuButton == nullptr)
+    {
+        return false;
+    }
+    CancelJoinMenuButton->OnClicked.AddDynamic(this, &UMainMenu::OpenMainMenu);
 
     return true;
 }
@@ -83,6 +96,34 @@ void UMainMenu::HostServer()
     {
         MenuInterface->Host();
     }
+}
+
+void UMainMenu::OpenJoinMenu()
+{
+    if (MenuSwitcher == nullptr)
+    {
+        return;
+    }
+    if (JoinMenu == nullptr)
+    {
+        return;
+    }
+    MenuSwitcher->SetActiveWidget(JoinMenu);
+}
+
+
+
+void UMainMenu::OpenMainMenu()
+{
+    if (MenuSwitcher == nullptr)
+    {
+        return;
+    }
+    if (MainMenu == nullptr)
+    {
+        return;
+    }
+    MenuSwitcher->SetActiveWidget(MainMenu);
 }
 
 
