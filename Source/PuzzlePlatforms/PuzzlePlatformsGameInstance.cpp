@@ -8,6 +8,7 @@
 #include "Blueprint/UserWidget.h"
 
 #include "MenuSystem/MainMenu.h"
+#include "MenuSystem/MenuWidget.h"
 
 
 
@@ -21,6 +22,15 @@ UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitiali
     }
 
     MenuClass = MenuBPClass.Class;
+
+    ConstructorHelpers::FClassFinder<UUserWidget> InGameMenuBPClass(TEXT("/Game/MenuSystem/WBP_InGameMenu"));
+    if (InGameMenuBPClass.Class == nullptr)
+    {
+        UE_LOG(LogTemp, Error, TEXT("WBP_InGameMenu class not found"));
+        return;
+    }
+
+    InGameMenuClass = InGameMenuBPClass.Class;
 }
 
 void UPuzzlePlatformsGameInstance::Init()
@@ -45,6 +55,25 @@ void UPuzzlePlatformsGameInstance::LoadMenu()
     Menu->Setup();
 
     Menu->SetMenuInterface(this);
+}
+
+void UPuzzlePlatformsGameInstance::InGameLoadMenu()
+{
+    if (InGameMenuClass == nullptr)
+    {
+        UE_LOG(LogTemp, Error, TEXT("InGameMenuClass not set"));
+        return;
+    }
+    UMenuWidget* InGameMenu = CreateWidget<UMenuWidget>(this, InGameMenuClass);
+    if (InGameMenu == nullptr)
+    {
+        UE_LOG(LogTemp, Error, TEXT("Menu ptr not set"));
+        return;
+    }
+
+    InGameMenu->Setup();
+
+    InGameMenu->SetMenuInterface(this);
 }
 
 void UPuzzlePlatformsGameInstance::Host()
