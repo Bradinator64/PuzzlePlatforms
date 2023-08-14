@@ -20,6 +20,8 @@ public:
 
 	void Setup();
 
+	void Teardown();
+
 protected:
 	IMenuInterface* MenuInterface;
 

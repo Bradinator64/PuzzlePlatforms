@@ -54,6 +54,7 @@ void UPuzzlePlatformsGameInstance::LoadMenu()
 
     Menu->Setup();
 
+
     Menu->SetMenuInterface(this);
 }
 
@@ -121,5 +122,15 @@ void UPuzzlePlatformsGameInstance::Join(const FString& Address)
     PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 }
 
+void UPuzzlePlatformsGameInstance::LoadMainMenu()
+{
+    APlayerController* PlayerController = GetFirstLocalPlayerController();
+    if (PlayerController == nullptr)
+    {
+        UE_LOG(LogTemp, Error, TEXT("PlayerController pointer equals null"));
+        return;
+    }
+    PlayerController->ClientTravel("/Game/MenuSystem/MainMenu", ETravelType::TRAVEL_Absolute);
+}
 
 

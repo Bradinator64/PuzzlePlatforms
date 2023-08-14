@@ -37,7 +37,6 @@ void UMenuWidget::Setup()
 void UMenuWidget::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
 {
     Super::OnLevelRemovedFromWorld(InLevel, InWorld);
-
     this->RemoveFromViewport();
 
     if (InWorld == nullptr)
@@ -45,7 +44,21 @@ void UMenuWidget::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
         UE_LOG(LogTemp, Error, TEXT("Error: World ptr not found for menu destruction"));
         return;
     }
-    APlayerController* PlayerController = InWorld->GetFirstPlayerController();
+    Teardown();
+}
+
+void UMenuWidget::Teardown()
+{
+    this->RemoveFromViewport();
+
+    UWorld* World = GetWorld();
+    if (World == nullptr)
+    {
+        UE_LOG(LogTemp, Error, TEXT("Error: World ptr not found in UMenuWidget::Teardown()"));
+        return;
+    }
+
+    APlayerController* PlayerController = World->GetFirstPlayerController();
     if (PlayerController == nullptr)
     {
         UE_LOG(LogTemp, Error, TEXT("Error: PlayerController ptr not found for menu destruction"));
@@ -56,5 +69,6 @@ void UMenuWidget::OnLevelRemovedFromWorld(ULevel* InLevel, UWorld* InWorld)
     PlayerController->SetInputMode(InputModeData);
     PlayerController->bShowMouseCursor = false;
 }
+
 
 
