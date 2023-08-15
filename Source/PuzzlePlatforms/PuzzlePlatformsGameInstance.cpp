@@ -6,6 +6,7 @@
 #include "Engine/Engine.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
+#include "EngineUtils.h"
 
 #include "MenuSystem/MainMenu.h"
 #include "MenuSystem/MenuWidget.h"
@@ -129,6 +130,18 @@ void UPuzzlePlatformsGameInstance::LoadMainMenu()
     {
         UE_LOG(LogTemp, Error, TEXT("PlayerController pointer equals null"));
         return;
+    }
+    //if the player controller is the host
+    if (PlayerController->HasAuthority())
+    {
+        for (APlayerController* Controller : TActorRange<APlayerController>(GetWorld()))
+        {
+            if (Controller != PlayerController)
+            {
+                //call ClientTravel() on any controllers that are not the host's controller
+                Controller->ClientTravel("/Game/MenuSystem/MainMenu", ETravelType::TRAVEL_Absolute);
+            }
+        }
     }
     PlayerController->ClientTravel("/Game/MenuSystem/MainMenu", ETravelType::TRAVEL_Absolute);
 }
